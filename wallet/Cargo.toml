@@ -87,4 +87,4 @@ ledger = [
   "dep:mintlayer-ledger-messages",
   "wallet-types/ledger",
 ]
-default = ["trezor", "ledger"]
+default = ["trezor"]

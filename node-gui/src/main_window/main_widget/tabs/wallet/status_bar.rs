@@ -14,10 +14,10 @@
 // limitations under the License.
 
 #[cfg(any(feature = "trezor", feature = "ledger"))]
-use iced::widget::{rich_text, span};
+use iced::widget::{rich_text, row, span};
 use iced::{
     font,
-    widget::{container, row, Container},
+    widget::{container, Container, Row},
     Alignment, Element, Font, Length, Padding, Theme,
 };
 
@@ -31,13 +31,17 @@ const HORIZONTAL_PADDING: f32 = 10.;
 
 #[allow(clippy::float_arithmetic)]
 pub fn estimate_status_bar_height(wallet_info: &WalletExtraInfo) -> f32 {
+    #[cfg(any(feature = "trezor", feature = "ledger"))]
+    let height_for_hw_wallet = TEXT_SIZE + 2. * VERTICAL_PADDING
+            // For some reason, the status bar gets a bit of additional height.
+            + 4.;
+
     match wallet_info {
         WalletExtraInfo::SoftwareWallet => 0.,
-        WalletExtraInfo::TrezorWallet { .. } | WalletExtraInfo::LedgerWallet { .. } => {
-            TEXT_SIZE + 2. * VERTICAL_PADDING
-            // For some reason, the status bar gets a bit of additional height.
-            + 4.
-        }
+        #[cfg(feature = "trezor")]
+        WalletExtraInfo::TrezorWallet { .. } => height_for_hw_wallet,
+        #[cfg(feature = "ledger")]
+        WalletExtraInfo::LedgerWallet { .. } => height_for_hw_wallet,
     }
 }
 
@@ -47,7 +51,7 @@ pub fn view_status_bar(wallet_info: &WalletExtraInfo) -> Option<Element<'static,
         ..Font::default()
     };
 
-    let row = match wallet_info {
+    let row: Row<'_, WalletMessage> = match wallet_info {
         WalletExtraInfo::SoftwareWallet => {
             return None;
         }
