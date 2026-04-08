@@ -39,7 +39,7 @@ jobs:
 
     - name: Install build dependencies
       run: |
-        sudo apt-get install -y debhelper zip imagemagick
+        sudo apt-get install -y debhelper zip imagemagick libdbus-1-dev libusb-1.0-0-dev pkg-config
         if [ "${{ matrix.arch }}" = "x86_64" ]; then
           sudo apt-get install -y rpm
         fi
