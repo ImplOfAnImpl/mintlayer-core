@@ -91,7 +91,7 @@ jobs:
         # CC_aarch64_unknown_linux_gnu: aarch64-linux-gnu-gcc
         # AR_aarch64_unknown_linux_gnu: aarch64-linux-gnu-ar
         PKG_CONFIG_ALLOW_CROSS_aarch64_unknown_linux_gnu: "1"
-        PKG_CONFIG_LIBDIR_aarch64_unknown_linux_gnu: "/usr/lib/aarch64-linux-gnu/pkgconfig:/usr/share/pkgconfig"
+        # PKG_CONFIG_LIBDIR_aarch64_unknown_linux_gnu: "/usr/lib/aarch64-linux-gnu/pkgconfig:/usr/share/pkgconfig"
       run: |
         cargo build --release --locked --target ${{ matrix.arch }}-unknown-linux-gnu --features trezor,ledger
 
