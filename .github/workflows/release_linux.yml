@@ -50,12 +50,12 @@ jobs:
 
           sudo sed -i -E 's/^deb /deb [arch=amd64] /' /etc/apt/sources.list
 
-          cat <<'EOF' | sudo tee /etc/apt/sources.list.d/ubuntu-ports-arm64.list
-          deb [arch=arm64 signed-by=/usr/share/keyrings/ubuntu-archive-keyring.gpg] http://ports.ubuntu.com/ubuntu-ports jammy main restricted universe multiverse
-          deb [arch=arm64 signed-by=/usr/share/keyrings/ubuntu-archive-keyring.gpg] http://ports.ubuntu.com/ubuntu-ports jammy-updates main restricted universe multiverse
-          deb [arch=arm64 signed-by=/usr/share/keyrings/ubuntu-archive-keyring.gpg] http://ports.ubuntu.com/ubuntu-ports jammy-backports main restricted universe multiverse
-          deb [arch=arm64 signed-by=/usr/share/keyrings/ubuntu-archive-keyring.gpg] http://ports.ubuntu.com/ubuntu-ports jammy-security main restricted universe multiverse
-          EOF
+          {
+            echo 'deb [arch=arm64 signed-by=/usr/share/keyrings/ubuntu-archive-keyring.gpg] http://ports.ubuntu.com/ubuntu-ports jammy main restricted universe multiverse'
+            echo 'deb [arch=arm64 signed-by=/usr/share/keyrings/ubuntu-archive-keyring.gpg] http://ports.ubuntu.com/ubuntu-ports jammy-updates main restricted universe multiverse'
+            echo 'deb [arch=arm64 signed-by=/usr/share/keyrings/ubuntu-archive-keyring.gpg] http://ports.ubuntu.com/ubuntu-ports jammy-backports main restricted universe multiverse'
+            echo 'deb [arch=arm64 signed-by=/usr/share/keyrings/ubuntu-archive-keyring.gpg] http://ports.ubuntu.com/ubuntu-ports jammy-security main restricted universe multiverse'
+          } | sudo tee /etc/apt/sources.list.d/ubuntu-ports-arm64.list > /dev/null
 
           sudo apt-get update
 
