@@ -45,24 +45,36 @@ jobs:
 
     - name: Install build dependencies
       run: |
-        sudo apt-get update
-        sudo apt-get install -y debhelper zip imagemagick pkg-config
-
         if [ "${{ matrix.arch }}" = "aarch64" ]; then
           sudo dpkg --add-architecture arm64
+
+          sudo sed -i -E 's/^deb /deb [arch=amd64] /' /etc/apt/sources.list
+
+          cat <<'EOF' | sudo tee /etc/apt/sources.list.d/ubuntu-ports-arm64.list
+          deb [arch=arm64 signed-by=/usr/share/keyrings/ubuntu-archive-keyring.gpg] http://ports.ubuntu.com/ubuntu-ports jammy main restricted universe multiverse
+          deb [arch=arm64 signed-by=/usr/share/keyrings/ubuntu-archive-keyring.gpg] http://ports.ubuntu.com/ubuntu-ports jammy-updates main restricted universe multiverse
+          deb [arch=arm64 signed-by=/usr/share/keyrings/ubuntu-archive-keyring.gpg] http://ports.ubuntu.com/ubuntu-ports jammy-backports main restricted universe multiverse
+          deb [arch=arm64 signed-by=/usr/share/keyrings/ubuntu-archive-keyring.gpg] http://ports.ubuntu.com/ubuntu-ports jammy-security main restricted universe multiverse
+          EOF
+
           sudo apt-get update
+
           sudo apt-get install -y \
             gcc-aarch64-linux-gnu g++-aarch64-linux-gnu \
             libdbus-1-dev:arm64 \
             libusb-1.0-0-dev:arm64 \
             libudev-dev:arm64
         else
+          sudo apt-get update
+
           sudo apt-get install -y \
             rpm \
             libdbus-1-dev \
             libusb-1.0-0-dev \
             libudev-dev
         fi
+
+        sudo apt-get install -y debhelper zip imagemagick pkg-config
 
     - name: Build
       env:
