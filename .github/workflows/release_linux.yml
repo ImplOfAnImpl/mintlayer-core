@@ -26,6 +26,12 @@ jobs:
         echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
         echo "Version extracted: $VERSION"
 
+    - name: Foo
+      run: |
+        ls -la /etc/apt/sources.list.d
+        cat /etc/apt/sources.list.d/ubuntu.sources
+        cat /etc/apt/sources.list
+
     - name: Set up Rust
       uses: dtolnay/rust-toolchain@stable
       with:
